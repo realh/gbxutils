@@ -1,9 +1,7 @@
-const {GbxBytesParser} = imports.core.parser;
-const {GbxChunk} = imports.core.chunk;
+import {GbxBytesParser} from "./parser.js";
+import {GbxChunk} from "./chunk.js";
 
-var GbxHeader = (function() {
-
-class GbxHeader {
+export class GbxHeader {
     constructor(inp) {
         if (inp instanceof GbxBytesParser) {
             this.constructFromParser(inp);
@@ -88,7 +86,3 @@ class GbxHeader {
         return o;
     }
 }
-
-return GbxHeader;
-
-})()

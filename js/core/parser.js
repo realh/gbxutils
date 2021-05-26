@@ -1,8 +1,6 @@
 const {toString} = imports.byteArray;
 
-var {Hex, GbxBytesParser} = (function() {
-
-class Hex {
+export class Hex {
     constructor(value) {
         this.value = value;
     }
@@ -12,7 +10,7 @@ class Hex {
     }
 }
 
-class GbxBytesParser {
+export class GbxBytesParser {
     // bytes is a Uint8Array
     constructor(bytes) {
         this.bytes = bytes;
@@ -70,7 +68,3 @@ class GbxBytesParser {
         this.offset += l;
     }
 }
-
-return {Hex, GbxBytesParser};
-
-})()

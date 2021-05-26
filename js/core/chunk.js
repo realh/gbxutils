@@ -1,8 +1,6 @@
-const {Hex, GbxBytesParser} = imports.core.parser;
+import {Hex, GbxBytesParser} from "./parser.js";
 
-var GbxChunk = (function() {
-
-class GbxChunk {
+export class GbxChunk {
     constructor(inp, id, size) {
         if (inp instanceof GbxBytesParser) {
             this.constructFromParser(inp, id, size);
@@ -49,7 +47,3 @@ class GbxChunk {
         return new GbxChunk(inp, id, size);
     }
 }
-
-return GbxChunk;
-
-})();

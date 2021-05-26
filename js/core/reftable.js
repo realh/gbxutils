@@ -1,6 +1,4 @@
-const {GbxBytesParser} = imports.core.parser;
-
-var {GbxReferenceTable, SubFolder} = (function() {
+import {GbxBytesParser} from "./parser.js";
 
 function addSubFolders(o, p) {
     if (o.numSubFolders > 0) {
@@ -11,7 +9,7 @@ function addSubFolders(o, p) {
     }
 }
 
-class SubFolder {
+export class SubFolder {
     constructor(p) {
         this.name = p.string();
         this.numSubFolders = p.uint32();
@@ -30,7 +28,7 @@ class SubFolder {
     }
 }
 
-class GbxReferenceTable {
+export class GbxReferenceTable {
     constructor(inp) {
         if (inp instanceof GbxBytesParser) {
             this.constructFromParser(inp);
@@ -66,7 +64,3 @@ class GbxReferenceTable {
         return jsonable;
     }
 }
-
-return {GbxReferenceTable, SubFolder};
-
-})()

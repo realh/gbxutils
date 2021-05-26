@@ -1,10 +1,10 @@
-const {file_get_contents} = imports.gi.GLib;
-const {GbxBytesParser} = imports.core.parser;
-const {GbxHeader} = imports.core.header;
-const {GbxReferenceTable} = imports.core.reftable;
+import GLib from "gi://GLib";
+import {GbxBytesParser} from "./parser.js";
+import {GbxHeader} from "./header.js";
+import {GbxReferenceTable} from "./reftable.js";
 
-function loadGbx(filename) {
-    const [success, bytes] = file_get_contents(filename);
+export function loadGbx(filename) {
+    const [success, bytes] = GLib.file_get_contents(filename);
     if (!success) {
         throw Error(`Unable to load ${filename}`);
     }
