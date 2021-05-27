@@ -1,4 +1,5 @@
 import {GbxBytesParser} from "./parser.js";
+import {GbxObject} from "./gbxobject.js";
 
 function addSubFolders(o, p) {
     if (o.numSubFolders > 0) {
@@ -9,58 +10,49 @@ function addSubFolders(o, p) {
     }
 }
 
-export class SubFolder {
+export class SubFolder extends GbxObject {
     constructor(p) {
+        super(SubFolder.template0);
+    }
+
+    parseBinary(p) {
         this.name = p.string();
         this.numSubFolders = p.uint32();
-        addSubFolders(this, p, this.numSubFolders);
+        this.addSubFolders(p, this.numSubFolders);
+        return this;
     }
 
-    toJSON() {
-        let o = {
-            name: this.name,
-            numSubFolders: this.numSubFolders
-        }
+    addSubFolders(p) {
         if (this.numSubFolders > 0) {
-            o.folders = this.folders;
+            this.template = SubFolder.template;
         }
-        return o;
+        addSubFolders(this, p);
     }
+
+    static template0 = [["name", "string"], ["numSubFolders", "uint32"]];
+    static template = SubFolder.template0 + [["folders", "Array"]];
 }
 
-export class GbxReferenceTable {
-    constructor(inp) {
-        if (inp instanceof GbxBytesParser) {
-            this.constructFromParser(inp);
-        /*
-        } else if (typeof inp == "string") {
-            this.data = JSON.parse(inp);
-        */
-        } else {
-            Object.assign(this, inp);
-        }
+export class GbxReferenceTable extends GbxObject {
+    constructor() {
+        super(GbxReferenceTable.template);
     }
 
-    constructFromParser(p) {
-        this.numExternalNodes = p.uint32();
+    parseBinary(p) {
+        super.parseBinary(p);
         if (this.numExternalNodes > 0) {
-            this.ancestorLevel = p.uint32();
-            this.numSubFolders = p.uint32();
+            this.copyTemplate();
+            this.addTemplateAndValue(p, "ancestorLevel", "uint32");
+            this.addTemplateAndValue(p, "numSubFolders", "uint32");
+            console.log(`${this.numExternalNodes} external nodes, ` +
+                    `${this.numSubFolders} folders`);
+            if (this.numSubFolders > 0) {
+                this.template.push(["folders", "Array"]);
+            }
             addSubFolders(this, p);
         }
+        return this;
     }
 
-    toJSON() {
-        let jsonable = {
-            numExternalNodes: this.numExternalNodes
-        }
-        if (this.numExternalNodes > 0) {
-            jsonable.ancestorLevel = this.ancestorLevel;
-            jsonable.numSubFolders = this.numSubFolders;
-            if (this.numSubFolders > 0) {
-                jsonable.folders = this.folders;
-            }
-        }
-        return jsonable;
-    }
+    static template = [["numExternalNodes", "uint32"]];
 }

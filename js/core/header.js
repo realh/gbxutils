@@ -1,23 +1,6 @@
-import {GbxBytesParser, Uint32} from "./parser.js";
+import {GbxBytesParser} from "./parser.js";
 import {GbxObject} from "./gbxobject.js";
-import {GbxChunk} from "./chunk.js";
-
-class HeaderChunkSize extends Uint32 {
-    size() {
-        return this & 0x7fffffff;
-    }
-
-    heavy() {
-        return (this & 0x80000000) ? true : false;
-    }
-
-    toJSON() {
-        return {
-            size: this.size(),
-            heavy: this.heavy()
-        }
-    }
-}
+import {ChunkSize, GbxChunk} from "./chunk.js";
 
 export class GbxHeader extends GbxObject {
     constructor() {
@@ -26,7 +9,6 @@ export class GbxHeader extends GbxObject {
 
     parseBinary(p) {
         super.parseBinary(p);
-        this.version = p.uint16();
         if (this.version >= 3) {
             this.template = [["format", "char"],
                 ["refCompression", "char"],
@@ -44,23 +26,24 @@ export class GbxHeader extends GbxObject {
                 this.parseUserData(p, this.userDataSize);
             }
             this.addTemplateAndValue(p, "numNodes", "uint32");
-            this.numNodes = p.uint32();
         }
+        return this;
     }
 
     parseUserData(p, userDataSize) {
         const o = p.offset;
         const end = o + userDataSize;
         this.addTemplateAndValue(p, "numHeaderChunks", "uint32");
-        if (this.numHeaderChunks <= 0)
+        if (this.numHeaderChunks <= 0) {
             return;
+        }
         this.template.push(["headerChunks", "Array"]);
         this.headerChunks = [];
         let dataSize = 0;
         for (let n = 0; n < this.numHeaderChunks; ++n) {
             const hdr = {
                 chunkID: p.hex32(),
-                chunkSize: HeaderChunkSize(p.uint32())
+                chunkSize: new ChunkSize(p.uint32())
             }
             this.headerChunks.push(hdr);
             dataSize += hdr.chunkSize.size();
@@ -70,8 +53,9 @@ export class GbxHeader extends GbxObject {
                     `${userDataSize} and parsed data size ` +
                     `${p.offset - o + dataSize}`);
         }
-        for (const e of this.headerChunks) {
-            e.chunkData = GbxChunk.make(p, e.chunkID, e.chunkSize);
+        for (let i = 0; i < this.headerChunks.length; ++i) {
+            const e = this.headerChunks[i];
+            this.headerChunks[i] = GbxChunk.make(p, e.chunkID, e.chunkSize);
         }
     }
 

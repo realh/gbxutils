@@ -10,22 +10,21 @@ export class GbxObject {
     // By default the template should be a reference to a static member. This
     // method replaces it with a copy so that it can be customised per-instance.
     copyTemplate() {
-        const t = {};
-        Object.assign(t, this.template);
-        this.template = t;
+        this.template = [...this.template];
     }
 
     // p is a GbxBytesParser
     parseBinary(p) {
         for (const kta of this.template) {
-            const k = ktv[0];
-            const t = ktv[1];
+            const k = kta[0];
+            const t = kta[1];
             if (kta.length > 2) {
-                this[k] = p[t](...a.slice(2));
+                this[k] = p[t](...kta.slice(2));
             } else {
-                this[k] = p[t];
+                this[k] = p[t]();
             }
         }
+        return this;
     }
 
     // This is useful when the template needs to be modified on the fly
@@ -35,14 +34,18 @@ export class GbxObject {
         if (args !== undefined) {
             this[name] = p[type](...args);
         } else {
-            this[name] = p[type];
+            this[name] = p[type]();
         }
     }
 
     toJSON() {
         let o = {};
-        for (const [k, _] of this.template) {
-            o[k] = this[k];
+        for (const [k, t] of this.template) {
+            let v = this[k];
+            if (t == "hex32" || k == "classID" || k == "chunkID") {
+                v = v.toString(16);
+            }
+            o[k] = v;
         }
         return o;
     }

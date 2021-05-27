@@ -9,7 +9,9 @@ export function loadGbx(filename) {
         throw Error(`Unable to load ${filename}`);
     }
     let parser = new GbxBytesParser(bytes);
-    const header = new GbxHeader(parser);
-    const refTable = new GbxReferenceTable(parser);
+    const header = new GbxHeader();
+    header.parseBinary(parser);
+    const refTable = new GbxReferenceTable();
+    refTable.parseBinary(parser);
     return {header, refTable};
 }
