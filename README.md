@@ -1,7 +1,7 @@
 gbxutils
 ========
 
-Utilities for manipulating Trackmania maps and possible more.
+Utilities for manipulating Trackmania maps and possibly more.
 
 Status
 ------
