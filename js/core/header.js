@@ -1,34 +1,49 @@
-import {GbxBytesParser} from "./parser.js";
+import {GbxBytesParser, Uint32} from "./parser.js";
+import {GbxObject} from "./gbxobject.js";
 import {GbxChunk} from "./chunk.js";
 
-export class GbxHeader {
-    constructor(inp) {
-        if (inp instanceof GbxBytesParser) {
-            this.constructFromParser(inp);
-        /*
-        } else if (typeof inp == "string") {
-            this.data = JSON.parse(inp);
-        */
-        } else {
-            Object.assign(this, inp);
-        }
+class HeaderChunkSize extends Uint32 {
+    size() {
+        return this & 0x7fffffff;
     }
 
-    constructFromParser(p) {
-        this.magic = p.string(3);
+    heavy() {
+        return (this & 0x80000000) ? true : false;
+    }
+
+    toJSON() {
+        return {
+            size: this.size(),
+            heavy: this.heavy()
+        }
+    }
+}
+
+export class GbxHeader extends GbxObject {
+    constructor() {
+        super(GbxHeader.template);
+    }
+
+    parseBinary(p) {
+        super.parseBinary(p);
         this.version = p.uint16();
         if (this.version >= 3) {
-            this.format = p.char();
-            this.refCompression = p.char();
-            this.bodyCompression = p.char();
+            this.template = [["format", "char"],
+                ["refCompression", "char"],
+                ["bodyCompression", "char"]]
             if (this.version >= 4) {
-                this.unknown = p.char();
+                this.template.push(["unknown", "char"]);
             }
-            this.classID = p.hex32();
+            this.template.push(["classID", "hex32"]);
             if (this.version >= 6) {
-                this.userDataSize = p.uint32();
+                this.template.push(["userDataSize", "uint32"]);
+            }
+            super.parseBinary(p);
+            this.template.unshift(...GbxHeader.template);
+            if (this.version >= 6) {
                 this.parseUserData(p, this.userDataSize);
             }
+            this.addTemplateAndValue(p, "numNodes", "uint32");
             this.numNodes = p.uint32();
         }
     }
@@ -36,22 +51,19 @@ export class GbxHeader {
     parseUserData(p, userDataSize) {
         const o = p.offset;
         const end = o + userDataSize;
-        this.numHeaderChunks = p.uint32();
+        this.addTemplateAndValue(p, "numHeaderChunks", "uint32");
+        if (this.numHeaderChunks <= 0)
+            return;
+        this.template.push(["headerChunks", "Array"]);
         this.headerChunks = [];
         let dataSize = 0;
         for (let n = 0; n < this.numHeaderChunks; ++n) {
             const hdr = {
                 chunkID: p.hex32(),
-                chunkSize: p.uint32()
-            }
-            if (hdr.chunkSize & (1 << 31)) {
-                hdr.chunkSize = hdr.chunkSize & 0x7fffffff;
-                hdr.heavy = true;
-            } else {
-                hdr.heavy = false;
+                chunkSize: HeaderChunkSize(p.uint32())
             }
             this.headerChunks.push(hdr);
-            dataSize += hdr.chunkSize;
+            dataSize += hdr.chunkSize.size();
         }
         if (p.offset + dataSize != end) {
             throw Error(`Discrepancy between userDataSize ` +
@@ -63,26 +75,5 @@ export class GbxHeader {
         }
     }
 
-    toJSON() {
-        let o = {
-            magic: this.magic,
-            version: this.version
-        }
-        if (this.version >= 3) {
-            o.format = this.format;
-            o.refCompression = this.refCompression;
-            o.bodyCompression = this.bodyCompression;
-            if (this.version >= 4) {
-                o.unknown = this.unknown;
-            }
-            o.classID = this.classID;
-            if (this.version >= 6) {
-                o.userDataSize = this.userDataSize;
-                o.numHeaderChunks = this.numHeaderChunks;
-                o.headerChunks = this.headerChunks;
-            }
-            o.numNodes = this.numNodes;
-        }
-        return o;
-    }
+    static template = [["magic", "string", 3], ["version", "uint16"]];
 }
