@@ -48,7 +48,7 @@ export class GbxObject {
 
     // This is useful when the template needs to be modified on the fly
     // depending on previous values.
-    addTemplateAndValue(p, name, type, args) {
+    addTemplateAndValue(p, name, type, ...args) {
         this.template.push([name, type]);
         if (args !== undefined) {
             this[name] = p[type](...args);
