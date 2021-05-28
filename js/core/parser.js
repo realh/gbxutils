@@ -56,6 +56,20 @@ export class GbxBytesParser {
         return bytesToUint32(this.bytes, o);
     }
 
+    uint64() {
+        let l = this.uint32();
+        let b = this.uint32();
+        return [l, b];
+    }
+
+    uint128() {
+        let w0 = this.uint32();
+        let w1 = this.uint32();
+        let w2 = this.uint32();
+        let w3 = this.uint32();
+        return [w0, w1, w2, w3];
+    }
+
     hex32() {
         return this.uint32();
     }
@@ -74,6 +88,7 @@ export class GbxBytesParser {
         this.offset += l;
     }
 
+    // See https://wiki.xaseco.org/wiki/ManiaPlanet_internals#Id
     lookbackstring() {
         if (!this.lookBackStrings.length) {
             const version = this.uint32();
@@ -81,19 +96,30 @@ export class GbxBytesParser {
                 throw Error(`First lookbackstring in a chunk should have ` +
                         `version 3, got ${version}`);
             }
+            //console.log(`lookback string version ${version}`);
         }
         const w = this.uint32();
-        const flags = (index & 0xc0000000) >> 30;
+        const flags = ((w & 0x80000000) ? 2 : 0) + ((w & 0x40000000) ? 1 : 0)
         let index = w & 0x3fffffff;
         if (index == 0x3fffffff) { index = -1; }
+        /*
+        console.log(
+          `lookbackstring word ${w} (0x${w}): flags ${flags}, index ${index}`);
+        */
         let value;
-        if (index == 0) {
+        if (flags == 0) {
+            value = index;
+            //console.log(`Numerical value ${value}`);
+        } else if (flags == 3) {
+            value = -1;
+            //console.log(`Unassigned value ${value}`);
+        } else if (index == 0) {
             value = this.string();
             this.lookBackStrings.push(value);
-        } else if (index >= 1) {
-            value = lookBackStrings[index - 1];
+            //console.log(`New string ${value}`);
         } else {
-            value = "Unassigned";
+            value = this.lookBackStrings[index - 1];
+            //console.log(`Existing string[${index - 1}] ${value}`);
         }
         return [w, value];
     }
@@ -103,5 +129,18 @@ export class GbxBytesParser {
         const collection = this.lookbackstring();
         const author = this.lookbackstring();
         return {id, collection, author};
+    }
+
+    float() {
+        const o = this.offset;
+        this.offset += 4;
+        const b = this.bytes.slice(o, this.offset);
+        return new Float32Array(b.buffer);
+    }
+
+    vec2D() {
+        const x = this.float();
+        const y = this.float();
+        return {x, y};
     }
 }
