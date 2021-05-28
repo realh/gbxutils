@@ -8,6 +8,7 @@ export class Common extends GbxChunk {
 
     doParseBinary(p) {
         GbxObject.prototype.parseBinary.call(this, p);
+        this.copyTemplate();
         if (this.version >= 1) {
             this.addTemplateAndValue(p, "locked", "bool");
             this.addTemplateAndValue(p, "password", "string");

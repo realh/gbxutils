@@ -8,6 +8,7 @@ export class TMDesc extends GbxChunk {
 
     doParseBinary(p) {
         GbxObject.prototype.parseBinary.call(this, p);
+        this.copyTemplate();
         if (this.version < 3) {
             this.addTemplateAndValue(p, "meta", "meta");
             this.addTemplateAndValue(p, "trackName", "string");
