@@ -31,13 +31,26 @@ export class GbxChunk extends GbxObject {
         this.concrete = GbxChunk.registry.has(id);
     }
 
+    // This checks that the amount of data read matches chunkSize. It calls
+    // doParseBinary, which is the method that needs to be overriden to
+    // customise the parsing.
     parseBinary(p) {
+        let o = p.offset;
+        this.doParseBinary(p);
+        o = p.offset - o;
+        if (this.chunkSize && (o != this.chunkSize.size())) {
+            throw Error(`Read ${o} bytes for chunk '${this.chunkName}'; ` +
+                    `does not match expected size ${this.chunkSize.size()}`);
+        }
+        return this;
+    }
+
+    doParseBinary(p) {
         if (this.concrete) {
             super.parseBinary(p);
         } else {
             this.data = p.data(this.chunkSize.size());
         }
-        return this;
     }
 
     toJSON() {
@@ -77,7 +90,7 @@ export class GbxChunk extends GbxObject {
     }
 
     static make(p, id, size) {
-        const ctor = this.registry[id];
+        const ctor = this.registry.get(id);
         let chunk;
         if (ctor) {
             chunk = new ctor(id, size);

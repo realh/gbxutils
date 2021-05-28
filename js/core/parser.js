@@ -18,6 +18,11 @@ export class GbxBytesParser {
     constructor(bytes) {
         this.bytes = bytes;
         this.offset = 0;
+        this.lookBackStrings = [];
+    }
+
+    resetLookBackStrings() {
+        this.lookBackStrings = [];
     }
 
     char() {
@@ -67,5 +72,36 @@ export class GbxBytesParser {
 
     skip(l) {
         this.offset += l;
+    }
+
+    lookbackstring() {
+        if (!this.lookBackStrings.length) {
+            const version = this.uint32();
+            if (version != 3) {
+                throw Error(`First lookbackstring in a chunk should have ` +
+                        `version 3, got ${version}`);
+            }
+        }
+        const w = this.uint32();
+        const flags = (index & 0xc0000000) >> 30;
+        let index = w & 0x3fffffff;
+        if (index == 0x3fffffff) { index = -1; }
+        let value;
+        if (index == 0) {
+            value = this.string();
+            this.lookBackStrings.push(value);
+        } else if (index >= 1) {
+            value = lookBackStrings[index - 1];
+        } else {
+            value = "Unassigned";
+        }
+        return [w, value];
+    }
+
+    meta() {
+        const id = this.lookbackstring();
+        const collection = this.lookbackstring();
+        const author = this.lookbackstring();
+        return {id, collection, author};
     }
 }

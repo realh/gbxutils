@@ -56,6 +56,7 @@ export class GbxHeader extends GbxObject {
         for (let i = 0; i < this.headerChunks.length; ++i) {
             const e = this.headerChunks[i];
             this.headerChunks[i] = GbxChunk.make(p, e.chunkID, e.chunkSize);
+            p.resetLookBackStrings();
         }
     }
 

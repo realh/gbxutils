@@ -2,6 +2,7 @@ import GLib from "gi://GLib";
 import {GbxBytesParser} from "./parser.js";
 import {GbxHeader} from "./header.js";
 import {GbxReferenceTable} from "./reftable.js";
+import * as allChunks from "../chunks/all.js";
 
 export function loadGbx(filename) {
     const [success, bytes] = GLib.file_get_contents(filename);

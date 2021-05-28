@@ -42,8 +42,17 @@ export class GbxObject {
         let o = {};
         for (const [k, t] of this.template) {
             let v = this[k];
-            if (t == "hex32" || k == "classID" || k == "chunkID") {
+            switch (t) {
+            case "hex32":
+            case "classID":
+            case "chunkID":
                 v = v.toString(16);
+                break;
+            case "lookbackstring":
+                const f = (v[0] & 0xc0000000) >> 30;
+                const i = v[0] & 0x3fffffff;
+                v = ["lookbackstring", f, i, v[1]];
+                break;
             }
             o[k] = v;
         }
