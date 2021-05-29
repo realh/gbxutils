@@ -78,7 +78,11 @@ export class GbxBytesParser {
         return this.uint32() ? true : false;
     }
 
+    // l can be omitted or negative to read to the end of the data
     data(l) {
+        if (!l || l < 0) {
+            l = this.bytes.length - this.offset;
+        }
         const o = this.offset;
         this.offset += l;
         return this.bytes.slice(o, this.offset);

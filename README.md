@@ -36,3 +36,10 @@ the project root. Gjs does work in Windows AFAIK, but you'll have to work out
 how to install and use it yourself, and convert the shell scripts to batch files
 or whatever. Alternatively, it should be trivial to convert the code to run in
 [node.js](https://nodejs.org/).
+
+minilzo
+-------
+
+`js/core/lzo1x.js` is not my own work. I copied it from the
+[minilzo-js project](https://github.com/abraidwood/minilzo-js) and simply added
+the `export` keyword.
