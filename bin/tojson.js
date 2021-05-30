@@ -1,5 +1,5 @@
 import GLib from "gi://GLib";
-import {loadGbx} from "../core/load.js";
+import {loadGbx} from "../lib/load.js";
 const byteArray = imports.byteArray;
 
 // gjs has a global log and no console

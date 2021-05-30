@@ -3,5 +3,4 @@ cdir=`pwd`
 cd `dirname "$0"`
 dir=`pwd`
 cd "$cdir"
-#gjs -I "${dir}/js" "${dir}/js/misc/tojson.js" "$@"
-gjs -m "${dir}/js/misc/tojson.js" "$@"
+gjs -m "${dir}/bin/tojson.js" "$@"
