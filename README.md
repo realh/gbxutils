@@ -32,10 +32,8 @@ Technical details
 
 The code is written in Javascript and should be run with
 [gjs](https://gitlab.gnome.org/GNOME/gjs) via shell script wrappers provided in
-the project root. Gjs does work in Windows AFAIK, but you'll have to work out
-how to install and use it yourself, and convert the shell scripts to batch files
-or whatever. Alternatively, it should be trivial to convert the code to run in
-[node.js](https://nodejs.org/).
+the project root. At some point I'll probably have to convert it to run in
+[node.js](https://nodejs.org/) to make it more accessible for MS Windows users.
 
 minilzo
 -------
