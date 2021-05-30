@@ -4,7 +4,7 @@ const byteArray = imports.byteArray;
 
 // gjs has a global log and no console
 if (!globalThis.console) {
-    globalThis.console = { log }
+    globalThis.console = { log, warn: (s) => { log("Warning: " + s); } }
 }
 
 const gbx = loadGbx(ARGV[0]);
