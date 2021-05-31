@@ -8,7 +8,7 @@ Status
 
 This project is embryonic and doesn't do much useful yet. At the moment it can
 only load a gbx file, partially parse it, and save a JSON representation, using
-the `tojson` tool.
+the `gbxtojson.js` tool.
 
 Goal
 ----
@@ -31,13 +31,14 @@ Technical details
 -----------------
 
 The code is written in Javascript and should be run with
-[gjs](https://gitlab.gnome.org/GNOME/gjs) via shell script wrappers provided in
-the project root. At some point I'll probably have to convert it to run in
-[node.js](https://nodejs.org/) to make it more accessible for MS Windows users.
+[node.js](https://nodejs.org/) (used to be gjs, but that's rather awkward for
+MS Windows users). It doesn't need to be installed with npm, it can simply be
+run in place.
 
-minilzo
--------
+minilzo and sax-js
+------------------
 
-`js/core/lzo1x.js` is not my own work. I copied it from the
-[minilzo-js project](https://github.com/abraidwood/minilzo-js) and simply added
-the `export` keyword.
+`lib/lzo1x.js` and `lib/sax.js` are not my own work. I copied them from
+[minilzo-js](https://github.com/abraidwood/minilzo-js) and
+[sax-js](https://github.com/isaacs/sax-js) respectively and simply added
+export directives. Refer to those files or projects for their licence details.
