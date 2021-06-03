@@ -1,6 +1,6 @@
 {
   "name": "gbxutils",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Utilities for examining and manipulating Trackmania maps",
   "main": "index.js",
   "type": "module",
