@@ -4,9 +4,9 @@ Utilities for manipulating Trackmania maps and possibly more.
 
 ## Working tools
 
-These are in the `bin` folder and should be run with node. Be careful not to
-clobber your input files with outputs. This project is still very new and likely
-to be buggy.
+These are in the `bin` folder and should be run with
+[node.js](https://nodejs.org/). Be careful not to clobber your input files with
+outputs. This project is still very new and likely to be buggy.
 
 ### gbxtojson.js
 
