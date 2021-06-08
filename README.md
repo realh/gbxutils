@@ -43,6 +43,14 @@ in one string. The default behaviour is to replace only the first match. Note
 this applies to one URL string at a time. You can use both flags at once by
 typing 'ig' or 'gi'.
 
+### tm2tonf.js
+
+This is not useful yet. It tries to convert TM2 Stadium maps to TMNF format,
+but currently TMNF can not load the resulting files. I believe this is because
+gbxutils can, so far, only parse chunks from the header. Hopefully it will soon
+be able to fully parse body chunks, then I'll be able to work out which chunks
+need to be changed and/or removed to complete the conversion.
+
 ## Goal
 
 The main aim is to allow large scale copy, transform and paste operations in
