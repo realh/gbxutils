@@ -15,15 +15,17 @@ outputs. This project is still very new and likely to be buggy.
 (In Windows you can use backslashes instead of forward slashes.)
 
 Loads a Trackmania map/challenge file and outputs a json representation. This
-tool is still incomplete and does not parse the body yet. Parsing the body is
-the next milestonre.
+tool is still incomplete and does not recognise all chunk types yet, but enough
+for it to work on some TMNF maps. When it encounters a chunk it doesn't
+recognise it will stop with an error, but it will still try to save what it's
+parsed so far.
 
 ### gbxurls.js
 
 ```
-node bin/gbxtojson.js Input.Gbx
-node bin/gbxtojson.js Input.Gbx Output.Gbx 'pattern' 'replacement'
-node bin/gbxtojson.js Input.Gbx Output.Gbx 'pattern' 'replacement' 'flags'
+node bin/gbxurls.js Input.Gbx
+node bin/gbxurls.js Input.Gbx Output.Gbx 'pattern' 'replacement'
+node bin/gbxurls.js Input.Gbx Output.Gbx 'pattern' 'replacement' 'flags'
 ```
 
 The first command lists dependency URLs found in Input.Gbx. The other versions
@@ -34,7 +36,7 @@ suffice. For example, if your files have moved to a different server address,
 but the path names are the same, you could use:
 
 ```
-node bin/gbxtojson.js Input.Gbx Output.Gbx old.example.com new.example.com
+node bin/gbxurls.js Input.Gbx Output.Gbx old.example.com new.example.com
 ```
 
 The most useful flags are 'i' to ignore case during pattern matching (so 'a'
@@ -45,11 +47,11 @@ typing 'ig' or 'gi'.
 
 ### tm2tonf.js
 
-This is not useful yet. It tries to convert TM2 Stadium maps to TMNF format,
-but currently TMNF can not load the resulting files. I believe this is because
-gbxutils can, so far, only parse chunks from the header. Hopefully it will soon
-be able to fully parse body chunks, then I'll be able to work out which chunks
-need to be changed and/or removed to complete the conversion.
+This is not very useful yet. It tries to convert TM2 Stadium maps to TMNF
+format, but currently TMNF can not load the resulting files. I need to analyse
+some maps before and after converting from TMNF to TM2, work out what
+differences there are and which chunks TMNF doesn't understand, and write code
+to convert or delete them.
 
 ## Goal
 
@@ -58,8 +60,8 @@ Trackmania Nations Forever maps. There are two possible ways this project can
 achieve that, but I don't know which one (or both) will be implemented.
 
 1. Provide a library to make it easy to write scripts that select and
-   manipulate blocks flexibly. This is a simpler option for this project, but
-   more difficult for 3rd party users.
+   manipulate blocks flexibly. This should be the more flexible solution, but
+   more difficult for muggles to use.
 
 2. TMNF maps can be imported into Trackmania 2 Stadium, which has a much more
    powerful editor, including copy, transform & paste. However, after a map has
