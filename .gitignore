@@ -1,5 +1,6 @@
 *.Gbx
 *.gbx
 *.json
+*log
 !package.json
 !jsconfig.json
