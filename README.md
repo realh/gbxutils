@@ -16,9 +16,9 @@ outputs. This project is still very new and likely to be buggy.
 
 Loads a Trackmania map/challenge file and outputs a json representation. This
 tool is still incomplete and does not recognise all chunk types yet, but enough
-for it to work on some TMNF maps. When it encounters a chunk it doesn't
-recognise it will stop with an error, but it will still try to save what it's
-parsed so far.
+for it to work on some TMNF maps (with no MediaTracker). When it encounters a
+chunk it doesn't recognise it will stop with an error, but it will still try to
+save what it's parsed so far.
 
 ### gbxurls.js
 
@@ -45,13 +45,32 @@ in one string. The default behaviour is to replace only the first match. Note
 this applies to one URL string at a time. You can use both flags at once by
 typing 'ig' or 'gi'.
 
+This tool passes the file body straight through without parsing it, so it does
+not suffer the limitations of most of the other tools.
+
+### gbxdelcps.js
+
+```
+node bin/gbxdelcps.js Input.Gbx Output.Gbx
+```
+
+Deletes all checkpoints. Most types of checkpoint are replaced by the nearest
+equivalent non-checkpoint block. Rings and grass checkpoints are just deleted
+because they have no real equivalent. Note that "StadiumGrassCheckpoints" may
+also appear on flat dirt (not dirt roads) and the blue floor that replaces
+grass under fabric roofs. If you encounter issues with "clip" blocks after
+removing checkpoints please report an issue.
+
+If you're wondering what this is useful for, it's to make it easy to record
+MT ghosts without having to drive the entire map. You will still have to
+manually move/place start and finish blocks to suit though.
+
 ### tm2tonf.js
 
-This is not very useful yet. It tries to convert TM2 Stadium maps to TMNF
-format, but currently TMNF can not load the resulting files. I need to analyse
-some maps before and after converting from TMNF to TM2, work out what
-differences there are and which chunks TMNF doesn't understand, and write code
-to convert or delete them.
+This is not very useful at the moment. It tries to convert TM2 Stadium maps to
+TMNF format, but currently has problems parsing the body of TM2 files. If I
+limit it to only changing the header, TMNF can still not load the resulting
+files.
 
 ## Goal
 
@@ -68,6 +87,18 @@ achieve that, but I don't know which one (or both) will be implemented.
    been saved by TM2 it can't be loaded back into TMNF. This project may be
    able to provide a tool to convert TM2 maps back into TMNF format, as long as
    no new or custom blocks have been added.
+
+## Status
+
+The code can now fully parse basic TMNF maps, but runs into problems when I try
+to load a TMNF map with lots of MediaTracker (MT), or a (basic) TM2 map. I
+can't afford to spend a lot of time debugging it, so it is unlikely that I will
+achieve goal 2 and I'm going to concentrate on goal 1 for now.
+
+This also means that if you want to use these tools, I recommend that you plan
+to do so before adding MT. Note, "MT" does not include custom pictures on signs
+etc. These should be OK. gbxurls.js should also work on any map, because it
+does not need to parse the body.
 
 ## Technical details
 
