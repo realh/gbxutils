@@ -59,7 +59,7 @@ equivalent non-checkpoint block. Rings and grass checkpoints are just deleted
 because they have no real equivalent. Note that "StadiumGrassCheckpoints" may
 also appear on flat dirt (not dirt roads) and the blue floor that replaces
 grass under fabric roofs. If you encounter issues with "clip" blocks after
-removing checkpoints please report an issue.
+removing checkpoints, please report an issue.
 
 If you're wondering what this is useful for, it's to make it easy to record
 MT ghosts without having to drive the entire map. You will still have to
@@ -71,6 +71,16 @@ This is not very useful at the moment. It tries to convert TM2 Stadium maps to
 TMNF format, but currently has problems parsing the body of TM2 files. If I
 limit it to only changing the header, TMNF can still not load the resulting
 files.
+
+### gbxident.js
+
+```
+node bin/gbxident.js Input.Gbx Output.Gbx
+```
+
+This just loads a map, decodes it into Javascript objects, then re-encodes and
+saves it. It's mainly for testing that the decoding and encoding works
+correctly.
 
 ## Goal
 
