@@ -1,6 +1,11 @@
 # gbxutils
 
-Utilities for manipulating Trackmania maps and possibly more.
+Utilities for examining and manipulating Trackmania Nations Forever maps.
+
+The main purpose of this project is to provide a set of Javascript functions so
+that you can write your own scripts to select a group of blocks in your map and
+either delete them from the map or transform and paste copies. Here is a
+[guide to writing scripts](ScriptGuide.md).
 
 ## Working tools
 
@@ -65,6 +70,10 @@ If you're wondering what this is useful for, it's to make it easy to record
 MT ghosts without having to drive the entire map. You will still have to
 manually move/place start and finish blocks to suit though.
 
+This code also provides an example of how you can use a selection filter
+function to do something more advanced than simply choose which blocks to
+select.
+
 ### tm2tonf.js
 
 This is not very useful at the moment. It tries to convert TM2 Stadium maps to
@@ -103,7 +112,7 @@ achieve that, but I don't know which one (or both) will be implemented.
 The code can now fully parse basic TMNF maps, but runs into problems when I try
 to load a TMNF map with lots of MediaTracker (MT), or a (basic) TM2 map. I
 can't afford to spend a lot of time debugging it, so it is unlikely that I will
-achieve goal 2 and I'm going to concentrate on goal 1 for now.
+achieve goal 2 and I've concentrated on achieving goal 1.
 
 This also means that if you want to use these tools, I recommend that you plan
 to do so before adding MT. Note, "MT" does not include custom pictures on signs
