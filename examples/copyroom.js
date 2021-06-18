@@ -23,7 +23,7 @@ function copyTransform(gbxFile) {
     // After rotation the blocks will be in range x: [-31, -13], z: [-12, 0];
     // translate them to DEST_RANGE x: [13, 31], z: [19, 31]
     translateSelection(seln, 13 + 31, 0, 31);
-    pasteBlocks(body, seln);
+    pasteBlocks(gbxFile, seln);
 }
 
 userTransformMain(copyTransform);
