@@ -51,7 +51,9 @@ this applies to one URL string at a time. You can use both flags at once by
 typing 'ig' or 'gi'.
 
 This tool passes the file body straight through without parsing it, so it does
-not suffer the limitations of most of the other tools.
+not suffer the limitations of most of the other tools. However, this means it
+might be ineffective, because URLs appear to be stored in the body as well as
+in the header.
 
 ### gbxdelcps.js
 
