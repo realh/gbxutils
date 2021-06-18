@@ -5,7 +5,7 @@ import {cutBlocks, getBlocksChunk} from "../lib/tools.js";
 
 // These ranges are inclusive
 const XRANGE = [13, 31];
-const ZRANGE = [0, 12];
+const ZRANGE = [19, 31];
 
 // This filter selects blocks based on their position and type. All walls
 // around the edges of the above x and z ranges will be deleted

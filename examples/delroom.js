@@ -4,7 +4,7 @@ import {cutBlocks, getBlocksChunk} from "../lib/tools.js";
 
 // These ranges are inclusive
 const XRANGE = [13, 31];
-const ZRANGE = [19, 31];
+const ZRANGE = [0, 12];
 
 // This filter selects blocks based on their position. All blocks within the
 // above x and z ranges, at any height (y), will be deleted
