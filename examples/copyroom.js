@@ -8,7 +8,7 @@ const SRC_XRANGE = [13, 31];
 const SRC_ZRANGE = [19, 31];
 
 // This filter selects blocks based on their position. All blocks within the
-// above x and z ranges, at any height (y), will be deleted
+// above x and z ranges, at any height (y), will be selected
 function filter(block) {
     return block.x >= SRC_XRANGE[0] && block.x <= SRC_XRANGE[1] &&
         block.z >= SRC_ZRANGE[0] && block.z <= SRC_ZRANGE[1];
