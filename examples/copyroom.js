@@ -1,4 +1,4 @@
-// This example deletes all the blocks within a rectangular cuboid
+// This example copies a room, rotates it 180deg and pastes it elsewhere
 import {userTransformMain} from "../lib/transform.js";
 import {copyBlocks, rotateSelection, translateSelection, pasteBlocks,
     getSelectionBounds} from "../lib/tools.js";
