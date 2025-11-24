@@ -109,7 +109,7 @@ and return true to add the block to the selection, false to skip it.
 
 ### copyBlocks(body, filter)
 
-`blocks` is a GbxBody or GbxFile. It uses `filter` to select blocks and returns
+`body` is a GbxBody or GbxFile. It uses `filter` to select blocks and returns
 the selection as an array of `ChallengeBlock` objects. These blocks are copies
 of the originals.
 
