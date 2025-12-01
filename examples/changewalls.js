@@ -32,7 +32,8 @@ function filter(block) {
 
 // Finds and returns a StadiumPlatformWallBorder block from the gbx file.
 // Trying to create one using `new ChallengeBlock(...)`, or by modifying a
-// StadiumPlatformWall block, creates an invalid block which crashes the game.
+// StadiumPlatformWallPub2 block, creates an invalid block which crashes the
+// game.
 function findWallBorder(gbxFile) {
     const blocksChunk = getBlocksChunk(gbxFile);
     for (const block of blocksChunk.blocks) {
